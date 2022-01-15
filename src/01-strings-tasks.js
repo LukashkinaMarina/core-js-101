@@ -222,10 +222,11 @@ function getRectangleString(/* width, height */) {
  *
  */
 function encodeToRot13(str) {
-  return str.replace(/[a-zA-Z]/g, function (c) {
-    return String.fromCharCode(
-      (c <= 'Z' ? 90 : 122) >= (c = c.charCodeAt(0) + 13) ? c : c - 26
-    );
+  return str.replace(/[a-zA-Z]/g, (c) => {
+    const cond = c <= 'Z' ? 90 : 122;
+    const n = c.charCodeAt(0) + 13;
+    const cond1 = cond >= n ? n : n - 26;
+    return String.fromCharCode(cond1);
   });
 }
 
