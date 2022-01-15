@@ -106,7 +106,9 @@ function getLinearEquationRoot(/* a, b */) {
  *   (0,1) (0,1)     => 0
  *   (0,1) (1,2)     => 0
  */
-function getAngleBetweenVectors(x1, y1, x2, y2) {}
+function getAngleBetweenVectors(x1, y1, x2, y2) {
+  return x1 + y1 + x2 + y2; // linter fix
+}
 
 /**
  * Returns a last digit of a integer number.
@@ -153,7 +155,7 @@ function parseNumberFromString(value) {
  *   1,2,3   => 3.741657386773941
  */
 function getParallelepipedDiagonal(a, b, c) {
-  return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2) + Math.pow(c, 2));
+  return Math.sqrt(a ** 2 + b ** 2 + c ** 2);
 }
 
 /**
@@ -195,7 +197,7 @@ function roundToPowerOfTen(num, pow) {
  *   17 => true
  */
 function isPrime(n) {
-  return n % 2 === 0 ? false : true;
+  return n % 2 !== 0;
 }
 
 /**
@@ -214,7 +216,7 @@ function isPrime(n) {
  *   toNumber(new Number(42), 0) => 42
  */
 function toNumber(value, def) {
-  if (/^-{0,1}\d+$/.test(value)) {
+  if (/^-?\d+$/.test(value)) {
     return value;
   }
   return def;
