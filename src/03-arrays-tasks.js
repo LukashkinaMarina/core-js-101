@@ -553,7 +553,17 @@ function distinct(arr) {
  *    "Poland" => ["Lodz"]
  *   }
  */
-function group(array, keySelector, valueSelector) {}
+function group(array, keySelector, valueSelector) {
+  const map = new Map();
+  array.forEach((v) => {
+    const key = keySelector(v);
+    if (!map.get(key)) {
+      map.set(key, []);
+    }
+    map.get(key).push(valueSelector(v));
+  });
+  return map;
+}
 
 /**
  * Projects each element of the specified array to a sequence
@@ -568,8 +578,17 @@ function group(array, keySelector, valueSelector) {}
  *   [[1, 2], [3, 4], [5, 6]], (x) => x     =>   [ 1, 2, 3, 4, 5, 6 ]
  *   ['one','two','three'], x=>x.split('')  =>   ['o','n','e','t','w','o','t','h','r','e','e']
  */
-function selectMany(/* arr, childrenSelector */) {
-  throw new Error('Not implemented');
+function selectMany(arr, childrenSelector) {
+  const result = [];
+  arr.forEach((v) => {
+    if (v) {
+      const cv = childrenSelector(v);
+      if (cv) {
+        result.push(cv);
+      }
+    }
+  });
+  return result.flat(Infinity);
 }
 
 /**
@@ -606,7 +625,14 @@ function getElementByIndexes(arr, indexes) {
  *   [ 1, 2, 3, 4, 5, 6, 7, 8 ]   =>  [ 5, 6, 7, 8, 1, 2, 3, 4 ]
  *
  */
-function swapHeadAndTail(arr) {}
+function swapHeadAndTail(arr) {
+  if (!arr || arr.length < 2) return arr;
+  const mid = arr.length / 2;
+  if (mid === Math.trunc(mid)) {
+    return [...arr.splice(mid), ...arr];
+  }
+  return [...arr.splice(mid + 1), arr[Math.trunc(mid)], ...arr.splice(0, mid)];
+}
 
 module.exports = {
   findElement,
