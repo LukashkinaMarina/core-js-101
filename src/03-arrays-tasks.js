@@ -37,10 +37,13 @@ function findElement(arr, value) {
 function generateOdds(len) {
   const counter = [1];
   let count = 1;
-  while (counter.length < len) {
-    count += 2;
-    counter.push(count);
-  }
+  new Array(len).fill(0).filter(() => {
+    if (counter.length < len) {
+      count += 2;
+      counter.push(count);
+    }
+    return true;
+  });
   return counter;
 }
 
@@ -241,9 +244,10 @@ function toArrayOfSquares(arr) {
 function getMovingSum(arr) {
   const acu = [];
   let count = 0;
-  arr.forEach((el) => {
+  arr.filter((el) => {
     acu.push(count + el);
     count += el;
+    return true;
   });
   return acu;
 }
@@ -282,8 +286,9 @@ function getSecondItems(arr) {
  */
 function propagateItemsByPositionIndex(arr) {
   let result = [];
-  arr.forEach((item, index) => {
+  arr.filter((item, index) => {
     result = result.concat(Array(index + 1).fill(item));
+    return true;
   });
   return result;
 }
@@ -320,8 +325,9 @@ function get3TopItems(arr) {
  */
 function getPositivesCount(arr) {
   let sum = 0;
-  arr.forEach((elem) => {
+  arr.filter((elem) => {
     if (elem > 0 && typeof elem !== 'string') sum += 1;
+    return true;
   });
   return sum;
 }
@@ -475,8 +481,13 @@ function sortCitiesArray(arr) {
  *           [0,0,0,1,0],
  *           [0,0,0,0,1]]
  */
-function getIdentityMatrix(/* n */) {
-  throw new Error('Not implemented');
+function getIdentityMatrix(n) {
+  const mat = new Array(n).fill(new Array(n).fill(0));
+  return mat.map((row, index) => {
+    mat[index] = [...row];
+    mat[index][index] = 1;
+    return mat[index];
+  });
 }
 
 /**
@@ -495,10 +506,13 @@ function getIdentityMatrix(/* n */) {
 function getIntervalArray(start, end) {
   const arr = [start];
   let newStart = start;
-  while (newStart < end) {
-    newStart += 1;
-    arr.push(newStart);
-  }
+  new Array(Math.abs(start - end)).fill(0).filter(() => {
+    if (newStart < end) {
+      newStart += 1;
+      arr.push(newStart);
+    }
+    return true;
+  });
   return arr;
 }
 
@@ -515,10 +529,11 @@ function getIntervalArray(start, end) {
  */
 function distinct(arr) {
   const newArr = [];
-  arr.forEach((val) => {
+  arr.filter((val) => {
     if (!newArr.includes(val)) {
       newArr.push(val);
     }
+    return true;
   });
   return newArr;
 }
@@ -555,12 +570,13 @@ function distinct(arr) {
  */
 function group(array, keySelector, valueSelector) {
   const map = new Map();
-  array.forEach((v) => {
+  array.filter((v) => {
     const key = keySelector(v);
     if (!map.get(key)) {
       map.set(key, []);
     }
     map.get(key).push(valueSelector(v));
+    return true;
   });
   return map;
 }
@@ -580,13 +596,14 @@ function group(array, keySelector, valueSelector) {
  */
 function selectMany(arr, childrenSelector) {
   const result = [];
-  arr.forEach((v) => {
+  arr.filter((v) => {
     if (v) {
       const cv = childrenSelector(v);
       if (cv) {
         result.push(cv);
       }
     }
+    return true;
   });
   return result.flat(Infinity);
 }

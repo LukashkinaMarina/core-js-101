@@ -201,8 +201,13 @@ function extractEmails(str) {
  *             '└──────────┘\n'
  *
  */
-function getRectangleString(/* width, height */) {
-  throw new Error('Not implemented');
+function getRectangleString(width, height) {
+  let str = `┌${'─'.repeat(width - 2)}┐\n`;
+  for (let i = 0; i < height - 2; i += 1) {
+    str += `│${' '.repeat(width - 2)}│\n`;
+  }
+  str += `└${'─'.repeat(width - 2)}┘\n`;
+  return str;
 }
 
 /**
@@ -271,8 +276,18 @@ function isString(value) {
  *   'Q♠' => 50
  *   'K♠' => 51
  */
-function getCardId(/* value */) {
-  throw new Error('Not implemented');
+function getCardId(value) {
+  const arr = value
+    .replace('A', '1')
+    .replace('J', '11')
+    .replace('Q', '12')
+    .replace('K', '13')
+    .replace('♣', '+0')
+    .replace('♦', '+13')
+    .replace('♥', '+26')
+    .replace('♠', '+39')
+    .split('+');
+  return Number(arr[0]) + Number(arr[1]) - 1;
 }
 
 module.exports = {
