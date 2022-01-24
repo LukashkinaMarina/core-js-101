@@ -112,32 +112,62 @@ function fromJSON(proto, json) {
  */
 
 const cssSelectorBuilder = {
-  element(/* value */) {
-    throw new Error('Not implemented');
+  check(pos) {
+    if (this.pos > pos) {
+      throw new Error(
+        'Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element',
+      );
+    }
+    if (this.pos === pos && (pos === 1 || pos === 2 || pos === 6)) {
+      throw new Error(
+        'Element, id and pseudo-element should not occur more then one time inside the selector',
+      );
+    }
   },
 
-  id(/* value */) {
-    throw new Error('Not implemented');
+  result: '',
+
+  getSelf(pos, result) {
+    this.check(pos);
+    const self = Object.create(cssSelectorBuilder);
+    self.pos = pos;
+    self.result = result;
+    return self;
   },
 
-  class(/* value */) {
-    throw new Error('Not implemented');
+  element(value) {
+    return this.getSelf(1, this.result + value);
   },
 
-  attr(/* value */) {
-    throw new Error('Not implemented');
+  id(value) {
+    return this.getSelf(2, `${this.result}#${value}`);
   },
 
-  pseudoClass(/* value */) {
-    throw new Error('Not implemented');
+  class(value) {
+    return this.getSelf(3, `${this.result}.${value}`);
   },
 
-  pseudoElement(/* value */) {
-    throw new Error('Not implemented');
+  attr(value) {
+    return this.getSelf(4, `${this.result}[${value}]`);
   },
 
-  combine(/* selector1, combinator, selector2 */) {
-    throw new Error('Not implemented');
+  pseudoClass(value) {
+    return this.getSelf(5, `${this.result}:${value}`);
+  },
+
+  pseudoElement(value) {
+    return this.getSelf(6, `${this.result}::${value}`);
+  },
+
+  combine(selector1, combinator, selector2) {
+    return this.getSelf(
+      null,
+      `${selector1.result} ${combinator} ${selector2.result}`,
+    );
+  },
+
+  stringify() {
+    return this.result;
   },
 };
 
