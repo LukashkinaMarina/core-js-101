@@ -22,9 +22,7 @@
 function Rectangle(width, height) {
   this.width = width;
   this.height = height;
-  this.getArea = function () {
-    return width * height;
-  };
+  this.getArea = () => width * height;
 }
 
 /**
@@ -54,7 +52,8 @@ function getJSON(obj) {
  */
 function fromJSON(proto, json) {
   const obj = JSON.parse(json);
-  obj.__proto__ = proto;
+  const key = '__proto__';
+  obj[key] = proto;
   return obj;
 }
 

@@ -114,7 +114,7 @@ async function chainPromises(array, action) {
           },
           () => {
             count += 1;
-          }
+          },
         );
       }
     });
